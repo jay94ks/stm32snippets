@@ -29,6 +29,15 @@ if (size != sizeof(my_conf_uints)) {
 }
 ```
 
+### SPI 설정
+`w25qxx` 플래시 칩들은 아래 구성에서 정상 동작합니다.
+
+1. Frame Format: Motorola. (TI mode가 disable 되어야 함)
+2. Data Size: 8 bits.
+3. First Bit: MSB first.
+4. Clock Polarity: High.
+5. Clock Phase: 2 Edge.
+
 ### 512Mbit 이상 인식이 되지 않을때...
 `w25qxx.h` 파일을 열어서, 다음 줄을 찾습니다.
 ```
