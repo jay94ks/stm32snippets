@@ -53,3 +53,26 @@ if (size != sizeof(my_conf_uints)) {
 `W25QXX_EXPLICIT_MBIT`의 주석을 풀고, 비트 수를 작성한 후, 
 컴파일하면 칩 인식시에 비트 수가 맞는지만 검사하고, 그 외의 블록 크기 검사 등을 전혀 수행하지 않게 됩니다.
 따라서, 불필요한 코드가 일부 줄어들 수 있습니다.
+
+### 2개 이상의 CS(Chip select) 핀 제어가 필요한 경우...
+`w25qxx_t` 클래스를 상속받아 `select`, `deselect` 메서드를 오버라이드하여 적용할 수 있습니다.
+
+```
+class w25qxx_dualcs_t : public w25qxx_t {
+public:
+    // ... (중략) ...
+
+protected:
+    virtual void select() const override {
+        _cs1.write(low);
+        _cs2.write(low);
+        delay_cs();
+    }
+
+    virtual void deselect() const override {
+        _cs1.write(high);
+        _cs2.write(high);
+        delay_cs();
+    }
+};
+```

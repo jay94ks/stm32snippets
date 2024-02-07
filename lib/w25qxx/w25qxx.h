@@ -58,10 +58,9 @@ public:
     {   
     }
 
-private:
+protected:
     static void __attribute__((optimize("O0"))) delay_cs();
 
-private:
     /* chip select. */
     virtual void select() const { _cs.write(low); delay_cs(); }
 
