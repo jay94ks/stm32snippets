@@ -46,7 +46,7 @@ public:
     /**
      * initialize a new SPI interface as null device.
      */
-    spi_t() : _spi(nullptr) SPI_SUPPORT_FILTER(, dma(false)) { }
+    spi_t() : _spi(nullptr) SPI_SUPPORT_FILTER(, _dma(false)) { }
 
     /**
      * initialize a new SPI interface using its handle.

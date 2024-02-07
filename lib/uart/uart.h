@@ -129,7 +129,7 @@ public:
     /**
      * wait for RX/ERR interrupt.
      */
-    bool wait(uint32_t timeout = 0xffffffffu);
+    bool wait(uint32_t timeout = 0xffffffffu) const;
 
     /**
      * write the buffer through UART port.

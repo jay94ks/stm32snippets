@@ -1,13 +1,14 @@
 #include "Pin.h"
 
 pin_t::pin_t()
-    : pin_t(0)
+    : pin_t(low)
 {
 }
 
 pin_t::pin_t(pin_state_t state)
-    : pin_t(nullptr, 0), _state(state)
+    : pin_t(nullptr, 0)
 {
+	_state = state;
 }
 
 pin_t::pin_t(gpio_t port, pin_mask_t pin)
