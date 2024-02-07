@@ -46,7 +46,7 @@ public:
 
 protected:
     /* get the root instance. */
-    inline static uart_base_t* root() const { return _root; }
+    inline static uart_base_t* root() { return _root; }
 
     /* get the linked instance. */
     inline uart_base_t* link() const { return _link; }

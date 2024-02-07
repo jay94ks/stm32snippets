@@ -7,7 +7,7 @@ public:
      * proxy ERROR interrupt call to UART instance.
      */
     static void proxy_error(huart_t huart) {
-        auto uart = uart_t::root();
+        auto uart = uart_base_t::root();
         while(uart) {
             if (uart->handle() != huart) {
                 uart = uart->link();
@@ -49,8 +49,8 @@ extern "C" {
 // --
 uart_base_t* uart_base_t::_root = nullptr;
 
-uart_base_t::uart_t(uart_base_t uart)
-    : _uart(uart), _link(nullptr), _intr(0)
+uart_base_t::uart_base_t(huart_t uart)
+    : _uart(uart), _intr(0), _link(nullptr)
 {
 }
 
@@ -115,7 +115,7 @@ bool uart_base_t::disable() {
     return false;
 }
 
-bool uart_base_t::wait(uint32_t timeout) {
+bool uart_base_t::wait(uint32_t timeout) const {
     if (!intr_en()) {
         return false;
     }
