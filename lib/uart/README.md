@@ -85,6 +85,8 @@ public:
 ```
 my_uart_port my_uart;
 
+
+my_uart.enable();
 while(true) {
     my_uart.begin_rx(); // --> 내부에서 INTR_EN 플래그를 검사하므로 별도 검사 불필요.
 
