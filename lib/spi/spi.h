@@ -17,6 +17,17 @@
 #define SPI_SUPPORT_FILTER(...)
 #endif
 
+// --> to disable null guard, replace this to empty.
+#ifndef SPI_NULL_GUARD
+#define SPI_NULL_GUARD()    \
+    if (!_spi) { return false; }
+#endif
+
+#ifndef SPI_NULL_GUARD_V
+#define SPI_NULL_GUARD_V()    \
+    if (!_spi) { return; }
+#endif
+
 // --> shortcut.
 using hspi_t = SPI_HandleTypeDef*;
 
@@ -33,6 +44,11 @@ private:
 
 public:
     /**
+     * initialize a new SPI interface as null device.
+     */
+    spi_t() : _spi(nullptr) SPI_SUPPORT_FILTER(, dma(false)) { }
+
+    /**
      * initialize a new SPI interface using its handle.
      */
     spi_t(hspi_t spi, bool dma = false)
@@ -45,6 +61,12 @@ public:
      * infinite timeout.
      */
     static constexpr uint32_t infinite = 0xffffffffu;
+
+    /**
+     * for null check.
+     */
+    inline operator bool() const { return _spi != nullptr; }
+    inline bool operator !() const { return _spi == nullptr; }
 
     /**
      * get the internal SPI handle.
@@ -64,6 +86,7 @@ public:
      * test whether the SPI interface is ready or not.
      */
     inline bool ready() { 
+        SPI_NULL_GUARD();
         return HAL_SPI_GetState(_spi) == HAL_SPI_STATE_READY; 
     }
 
@@ -73,7 +96,12 @@ public:
      */
     void stop();
 #elif SPI_SUPPORT == 1
-    inline void stop() { HAL_SPI_DMAStop(_spi); }
+    inline void stop() { 
+        SPI_NULL_GUARD_V();
+        if (_spi) { 
+            HAL_SPI_DMAStop(_spi); 
+        } 
+    }
 #else 
     inline void stop() { }
 #endif 
@@ -91,6 +119,7 @@ public:
     bool read(void* buffer, uint32_t len, uint32_t timeout = infinite);
 #else
     inline bool read(void* buffer, uint32_t len, uint32_t timeout = infinite) {
+        SPI_NULL_GUARD();
         return HAL_SPI_Receive(_spi, (uint8_t*) buffer, len, timeout) == HAL_OK;
     }
 #endif
@@ -103,6 +132,7 @@ public:
     bool write(const void* buffer, uint32_t len, uint32_t timeout = infinite);
 #else
     inline bool write(const void* buffer, uint32_t len, uint32_t timeout = infinite) {
+        SPI_NULL_GUARD();
         return HAL_SPI_Transmit(_spi, (uint8_t*) buffer, len, timeout) == HAL_OK;
     }
 #endif
@@ -115,6 +145,7 @@ public:
     bool wread(const void* write, void* read, uint32_t len, uint32_t timeout = infinite);
 #else
     inline bool wread(const void* write, void* read, uint32_t len, uint32_t timeout = infinite) {
+        SPI_NULL_GUARD();
         return HAL_SPI_TransmitReceive(_spi, (uint8_t*) write, (uint8_t*) read, len, timeout) == HAL_OK;
     }
 #endif
@@ -128,10 +159,12 @@ public:
     bool read_n(void* buffer, uint32_t len);
 #elif SPI_SUPPORT == 1
     inline bool read_n(void* buffer, uint32_t len) {
+        SPI_NULL_GUARD();
         return HAL_SPI_Receive_DMA(_spi, (uint8_t*) buffer, len) == HAL_OK;
     }
 #else
     inline bool read_n(void* buffer, uint32_t len) {
+        SPI_NULL_GUARD();
         return HAL_SPI_Receive(_spi, (uint8_t*) buffer, len, infinite) == HAL_OK;
     }
 #endif
@@ -146,10 +179,12 @@ public:
     bool write_n(const void* buffer, uint32_t len);
 #elif SPI_SUPPORT == 1
     inline bool write_n(const void* buffer, uint32_t len) {
+        SPI_NULL_GUARD();
         return HAL_SPI_Transmit_DMA(_spi, (uint8_t*) buffer, len) == HAL_OK;
     }
 #else
     inline bool write_n(const void* buffer, uint32_t len) {
+        SPI_NULL_GUARD();
         return HAL_SPI_Transmit(_spi, (uint8_t*) buffer, len, infinite) == HAL_OK;
     }
 #endif
@@ -164,10 +199,12 @@ public:
     bool wread_n(const void* write, void* read, uint32_t len);
 #elif SPI_SUPPORT == 1
     inline bool wread_n(const void* write, void* read, uint32_t len) {
+        SPI_NULL_GUARD();
         return HAL_SPI_TransmitReceive_DMA(_spi, (uint8_t*) write, (uint8_t*) read, len) == HAL_OK;
     }
 #else
     inline bool wread_n(const void* write, void* read, uint32_t len) {
+        SPI_NULL_GUARD();
         return HAL_SPI_TransmitReceive(_spi, (uint8_t*) write, (uint8_t*) read, len, infinite) == HAL_OK;
     }
 #endif

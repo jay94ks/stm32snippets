@@ -2,6 +2,7 @@
 
 #if SPI_SUPPORT == 2
 void spi_t::stop() {
+    SPI_NULL_GUARD_V();
     if (_dma) {
         HAL_SPI_DMAStop(_spi);
     }
@@ -9,6 +10,8 @@ void spi_t::stop() {
 #endif 
 
 bool spi_t:: wait(uint32_t timeout) {
+    SPI_NULL_GUARD();
+
     uint32_t tick = HAL_GetTick();
     while(true) {
         if (ready()) {
@@ -24,6 +27,7 @@ bool spi_t:: wait(uint32_t timeout) {
 
 #if SPI_SUPPORT != 0
 bool spi_t::read(void* buffer, uint32_t len, uint32_t timeout) {
+    SPI_NULL_GUARD();
 #if SPI_SUPPORT == 2    // --> both.
     if (_dma) {
 #endif
@@ -47,6 +51,7 @@ bool spi_t::read(void* buffer, uint32_t len, uint32_t timeout) {
 
 #if SPI_SUPPORT != 0
 bool spi_t::write(const void* buffer, uint32_t len, uint32_t timeout) {
+    SPI_NULL_GUARD();
 #if SPI_SUPPORT == 2    // --> both.
     if (_dma) {
 #endif
@@ -70,6 +75,7 @@ bool spi_t::write(const void* buffer, uint32_t len, uint32_t timeout) {
 
 #if SPI_SUPPORT != 0
 bool spi_t::wread(const void* write, void* read, uint32_t len, uint32_t timeout) {
+    SPI_NULL_GUARD();
 #if SPI_SUPPORT == 2    // --> both.
     if (_dma) {
 #endif
@@ -93,6 +99,7 @@ bool spi_t::wread(const void* write, void* read, uint32_t len, uint32_t timeout)
 
 #if SPI_SUPPORT == 2    // --> both.
 bool spi_t::read_n(void* buffer, uint32_t len) {
+    SPI_NULL_GUARD();
     if (_dma) {
         return HAL_SPI_Receive_DMA(_spi, (uint8_t*) buffer, len) == HAL_OK;
     }
@@ -103,6 +110,7 @@ bool spi_t::read_n(void* buffer, uint32_t len) {
 
 #if SPI_SUPPORT == 2    // --> both.
 bool spi_t::write_n(const void* buffer, uint32_t len) {
+    SPI_NULL_GUARD();
     if (_dma) {
         return HAL_SPI_Transmit_DMA(_spi, (uint8_t*) buffer, len) == HAL_OK;
     }
@@ -113,6 +121,7 @@ bool spi_t::write_n(const void* buffer, uint32_t len) {
 
 #if SPI_SUPPORT == 2    // --> both.
 bool spi_t::wread_n(const void* write, void* read, uint32_t len) {
+    SPI_NULL_GUARD();
     if (_dma) {
         return HAL_SPI_TransmitReceive_DMA(_spi, (uint8_t*) write, (uint8_t*) read, len) == HAL_OK;
     }
