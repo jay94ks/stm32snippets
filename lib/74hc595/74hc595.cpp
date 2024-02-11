@@ -27,7 +27,6 @@ void l74hc595_t::end(bool flush) {
 }
 
 void l74hc595_t::flush() {
-    select();
     _latch.write(low);
 
     for(uint8_t i = 0; i < 8; ++i) {
@@ -41,7 +40,6 @@ void l74hc595_t::flush() {
     }
 
     _latch.write(high);
-    deselect();
 }
 
 pin_state_t l74hc595_t::read(uint8_t pin) {
