@@ -22,6 +22,10 @@ private:
     pin_state_t _state;
 
 public:
+    /* minimal delay fn. */
+    static void __attribute__((optimize("O0"))) delay();
+
+public:
     /**
      * initialize a new pin_t as `none` value.
      */

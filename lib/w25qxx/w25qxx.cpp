@@ -7,10 +7,6 @@
 #define W25QXX_INIT_GUARD(ret)
 #endif
 
-void __attribute__((optimize("O0"))) w25qxx_t::delay_cs() {
-	for(uint32_t i = 0; i < 10; ++i);
-}
-
 bool w25qxx_t::busy() const {
     uint8_t tx[2] = { 0x05, 0xa5 }; // --> read status 1
     uint8_t rx[2];

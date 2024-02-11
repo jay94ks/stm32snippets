@@ -1,5 +1,9 @@
 #include "Pin.h"
 
+void __attribute__((optimize("O0"))) pin_t::delay() {
+    for(uint32_t i = 0; i < 10; ++i);
+}
+
 pin_t::pin_t()
     : pin_t(low)
 {

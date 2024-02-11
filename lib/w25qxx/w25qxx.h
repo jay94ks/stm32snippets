@@ -59,13 +59,11 @@ public:
     }
 
 protected:
-    static void __attribute__((optimize("O0"))) delay_cs();
-
     /* chip select. */
-    virtual void select() const { _cs.write(low); delay_cs(); }
+    virtual void select() const { _cs.write(low); pin_t::delay(); }
 
     /* chip deselect. */
-    virtual void deselect() const { _cs.write(high); delay_cs(); }
+    virtual void deselect() const { _cs.write(high); pin_t::delay(); }
     
 public:
     /* test whether the chip is busy or not. */
