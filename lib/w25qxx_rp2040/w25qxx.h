@@ -340,6 +340,23 @@ public:
      * Uses: read(...) method.
      */
     uint32_t readBlock(uint32_t block, uint32_t offset, uint8_t* buf, uint32_t len);
+
+public:
+    /**
+     * Read a structure and returns true if full bytes loaded. 
+     */
+    template<typename T>
+    bool read(uint32_t addr, T* buf) {
+        return read(addr, (uint8_t*) buf, sizeof(T)) == sizeof(T);
+    }
+
+    /**
+     * Write a structure and returns true if full bytes stored. 
+     */
+    template<typename T>
+    bool write(uint32_t addr, const T* buf) {
+        return write(addr, (const uint8_t*) buf, sizeof(T)) == sizeof(T);
+    }
 };
 
 /**
